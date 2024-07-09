@@ -1,0 +1,23 @@
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .project-table thead tr {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .project-table th,
+  .project-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .project-table tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+  }
+  

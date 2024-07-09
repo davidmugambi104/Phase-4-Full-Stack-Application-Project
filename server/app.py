@@ -3,12 +3,17 @@ from models import db, Freelancer, Project, Client
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
 from flask_restful import Api, Resource
+from flask_cors import CORS
 import os
+
+app = Flask(__name__)
+
+# Configure CORS
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
-app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
@@ -19,11 +24,9 @@ db.init_app(app)
 
 api = Api(app)
 
-
 @app.route("/")
 def index():
     return "<h1>Freelancing Project Management</h1>"
-
 
 class Freelancers(Resource):
     def get(self):
@@ -33,7 +36,23 @@ class Freelancers(Resource):
             200,
         )
         return response
+    
+    def post(self):
+        try:
+            new_record = Freelancer(
+                name=request.json["name"],
+                username=request.json["username"],
+                email=request.json["email"],
+                rate=request.json["rate"]
+            )
 
+            db.session.add(new_record)
+            db.session.commit()
+            response = new_record.to_dict()
+            return make_response(jsonify(response), 201)
+
+        except Exception as e:
+            return make_response(jsonify({"errors": [str(e)]}), 400)
 
 class FreelancerByID(Resource):
     def get(self, id):
@@ -50,7 +69,6 @@ class FreelancerByID(Resource):
             )
         return response
 
-
 class Clients(Resource):
     def get(self):
         response_dict_list = [n.to_dict() for n in Client.query.all()]
@@ -59,7 +77,22 @@ class Clients(Resource):
             200,
         )
         return response
+    
+    def post(self):
+        try:
+            new_record = Client(
+                name=request.json["name"],
+                username=request.json["username"],
+                email=request.json["email"]
+            )
 
+            db.session.add(new_record)
+            db.session.commit()
+            response = new_record.to_dict()
+            return make_response(jsonify(response), 201)
+
+        except Exception as e:
+            return make_response(jsonify({"errors": [str(e)]}), 400)
 
 class Projects(Resource):
     def get(self):
@@ -73,11 +106,11 @@ class Projects(Resource):
     def post(self):
         try:
             new_record = Project(
-                title=request.form["title"],
-                description=request.form["description"],
-                rate=request.form["rate"],
-                freelancer_id=request.form["freelancer_id"],
-                client_id=request.form["client_id"]
+                title=request.json["title"],
+                description=request.json["description"],
+                rate=request.json["rate"],
+                freelancer_id=request.json["freelancer_id"],
+                client_id=request.json["client_id"]
             )
 
             db.session.add(new_record)
@@ -89,7 +122,6 @@ class Projects(Resource):
 
         except Exception as e:
             return make_response(jsonify({"errors": [str(e)]}), 400)
-
 
 class ProjectByID(Resource):
     def get(self, id):
@@ -110,7 +142,7 @@ class ProjectByID(Resource):
         project = Project.query.filter_by(id=id).first()
         if project:
             try:
-                for key, value in request.form.items():
+                for key, value in request.json.items():
                     setattr(project, key, value)
                 db.session.commit()
                 response = make_response(
@@ -146,13 +178,11 @@ class ProjectByID(Resource):
             )
         return response
 
-
 api.add_resource(Freelancers, "/freelancers")
 api.add_resource(FreelancerByID, "/freelancers/<int:id>")
 api.add_resource(Clients, "/clients")
 api.add_resource(Projects, "/projects")
 api.add_resource(ProjectByID, "/projects/<int:id>")
-
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

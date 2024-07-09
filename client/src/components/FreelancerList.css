@@ -1,0 +1,23 @@
+.freelancer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .freelancer-table thead tr {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+  
+  .freelancer-table th,
+  .freelancer-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .freelancer-table tbody tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+  }
+  
