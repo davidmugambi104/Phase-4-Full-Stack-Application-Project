@@ -25,6 +25,10 @@ body {
   font-size: var(--font-size);
   color: var(--text-color);
   background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 header {
@@ -105,14 +109,12 @@ button:hover {
   font-size: var(--font-size);
   color: var(--text-color);
   margin-bottom: 2em;
-  height: 3cm;
 }
 
 .button-group {
   display: flex;
   justify-content: center;
   gap: 10px;
-  
 }
 
 .action-button {
@@ -130,4 +132,11 @@ button:hover {
 .action-button:hover {
   background-color: var(--button-hover-bg-color);
   transform: translateY(-2px); /* Lift effect on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .home-container {
+    padding: 10px;
+  }
 }
