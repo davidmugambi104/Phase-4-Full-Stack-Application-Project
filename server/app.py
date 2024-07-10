@@ -185,6 +185,29 @@ class ProjectByID(Resource):
             )
         return response
 
+    def put(self, id):  # Add this method to handle PUT requests
+        project = Project.query.filter_by(id=id).first()
+        if project:
+            try:
+                for key, value in request.json.items():
+                    setattr(project, key, value)
+                db.session.commit()
+                response = make_response(
+                    jsonify(project.to_dict()),
+                    200
+                )
+            except Exception as e:
+                response = make_response(
+                    jsonify({"errors": [str(e)]}),
+                    400
+                )
+        else:
+            response = make_response(
+                jsonify({"error": "project not found"}),
+                404
+            )
+        return response
+
     def patch(self, id):
         project = Project.query.filter_by(id=id).first()
         if project:

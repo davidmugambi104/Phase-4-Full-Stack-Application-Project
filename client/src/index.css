@@ -89,7 +89,6 @@ button:hover {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #7dbde8; /* Soft blue background color */
   text-align: center;
   border-radius: 10px; /* Rounded corners for the container */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
@@ -106,12 +105,14 @@ button:hover {
   font-size: var(--font-size);
   color: var(--text-color);
   margin-bottom: 2em;
+  height: 3cm;
 }
 
 .button-group {
   display: flex;
   justify-content: center;
   gap: 10px;
+  
 }
 
 .action-button {

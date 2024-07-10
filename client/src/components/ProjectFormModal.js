@@ -24,8 +24,9 @@ const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess, initialProject })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = initialProject ? 'PUT' : 'POST';
+    const method = 'POST';
     const url = `http://localhost:5555/projects${initialProject ? `/${initialProject.id}` : ''}`;
+    const body = initialProject ? { ...project, _method: 'PUT' } : project;
 
     try {
       const response = await fetch(url, {
@@ -33,7 +34,7 @@ const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess, initialProject })
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
@@ -41,7 +42,10 @@ const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess, initialProject })
         onRequestClose();
       } else {
         const errorData = await response.json();
-        setError(`Error ${initialProject ? 'updating' : 'creating'} project: ${errorData.errors.join(', ')}`);
+        const errorMessage = errorData.errors && Array.isArray(errorData.errors)
+          ? errorData.errors.join(', ')
+          : errorData.message || 'Unknown error';
+        setError(`Error ${initialProject ? 'updating' : 'creating'} project: ${errorMessage}`);
       }
     } catch (error) {
       setError(`Error ${initialProject ? 'updating' : 'creating'} project: ${error.message}`);
