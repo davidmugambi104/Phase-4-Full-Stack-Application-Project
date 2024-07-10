@@ -11,23 +11,21 @@ const FreelancerList = ({ freelancers, openFreelancerForm, handleSuccess }) => {
       fetch(`http://localhost:5555/freelancers/${id}`, {
         method: 'DELETE',
       })
-      .then(response => {
-        if (response.ok) {
-          // Refresh freelancer list after deletion
-          handleSuccess();  // Call the handleSuccess method to refresh the list
-        } else {
-          throw new Error('Failed to delete freelancer');
-        }
-      })
-      .catch(error => {
-        console.error('Error deleting freelancer:', error);
-        // Handle error state
-      });
+        .then(response => {
+          if (response.ok) {
+            handleSuccess();
+          } else {
+            throw new Error('Failed to delete freelancer');
+          }
+        })
+        .catch(error => {
+          console.error('Error deleting freelancer:', error);
+        });
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Freelancers</h2>
       <table className="freelancer-table">
         <thead>
@@ -42,19 +40,21 @@ const FreelancerList = ({ freelancers, openFreelancerForm, handleSuccess }) => {
         <tbody>
           {freelancers.map(freelancer => (
             <tr key={freelancer.id}>
-              <td>{freelancer.name}</td>
-              <td>{freelancer.username}</td>
-              <td>{freelancer.email}</td>
-              <td>{freelancer.rate}</td>
-              <td>
-                <button onClick={() => handleEdit(freelancer)}>Edit</button>
-                <button onClick={() => handleDelete(freelancer.id)}>Delete</button>
+              <td data-label="Name">{freelancer.name}</td>
+              <td data-label="Username">{freelancer.username}</td>
+              <td data-label="Email">{freelancer.email}</td>
+              <td data-label="Rate">{freelancer.rate}</td>
+              <td data-label="Action">
+                <div className="action-buttons">
+                  <button className="edit-button" onClick={() => handleEdit(freelancer)}>Edit</button>
+                  <button className="delete-button" onClick={() => handleDelete(freelancer.id)}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={() => openFreelancerForm(null)}>Add Freelancer</button>
+      <button className="add-freelancer-button" onClick={() => openFreelancerForm(null)}>Add Freelancer</button>
     </div>
   );
 };

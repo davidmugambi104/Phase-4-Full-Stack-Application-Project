@@ -13,20 +13,19 @@ const ClientList = ({ clients, openClientForm, handleSuccess }) => {
       })
         .then(response => {
           if (response.ok) {
-            handleSuccess(); // Refresh client list after deletion
+            handleSuccess();
           } else {
             throw new Error('Failed to delete client');
           }
         })
         .catch(error => {
           console.error('Error deleting client:', error);
-          // Handle error state
         });
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Clients</h2>
       <table className="client-table">
         <thead>
@@ -40,18 +39,20 @@ const ClientList = ({ clients, openClientForm, handleSuccess }) => {
         <tbody>
           {clients.map(client => (
             <tr key={client.id}>
-              <td>{client.name}</td>
-              <td>{client.username}</td>
-              <td>{client.email}</td>
-              <td>
-                <button onClick={() => handleEdit(client)}>Edit</button>
-                <button onClick={() => handleDelete(client.id)}>Delete</button>
+              <td data-label="Name">{client.name}</td>
+              <td data-label="Username">{client.username}</td>
+              <td data-label="Email">{client.email}</td>
+              <td data-label="Action">
+                <div className="action-buttons">
+                  <button className="edit-button" onClick={() => handleEdit(client)}>Edit</button>
+                  <button className="delete-button" onClick={() => handleDelete(client.id)}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={() => openClientForm(null)}>Add Client</button>
+      <button className="add-client-button" onClick={() => openClientForm(null)}>Add Client</button>
     </div>
   );
 };

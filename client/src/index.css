@@ -10,6 +10,8 @@
   --button-bg-color: #4CAF50;
   --button-text-color: #fff;
   --button-hover-bg-color: #45a049;
+  --background-color: #e0f7fa; /* Light cyan background color */
+  --accent-color: #ffeb3b; /* Yellow accent color */
 }
 
 /* Reset some default styles */
@@ -22,7 +24,7 @@ body, h1, h2, p {
 body {
   font-size: var(--font-size);
   color: var(--text-color);
-  background-color: #fff;
+  background-color: var(--background-color);
 }
 
 header {
@@ -30,6 +32,7 @@ header {
   padding: 1em;
   color: var(--button-text-color);
   text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
 }
 
 nav ul {
@@ -45,6 +48,12 @@ nav ul li {
 nav ul li a {
   color: var(--button-text-color);
   text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: var(--accent-color); /* Accent color for hover effect */
 }
 
 footer {
@@ -52,6 +61,7 @@ footer {
   padding: 1em;
   text-align: center;
   margin-top: 2em;
+  border-top: 2px solid var(--primary-color); /* Border to separate footer */
 }
 
 button {
@@ -60,13 +70,63 @@ button {
   border: none;
   padding: 0.5em 1em;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 5px; /* Rounded corners for buttons */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for buttons */
 }
 
 button:hover {
   background-color: var(--button-hover-bg-color);
+  transform: translateY(-2px); /* Lift effect on hover */
 }
 
 .error {
   color: red;
+}
+
+/* Additional styles for the Home component */
+.home-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #7dbde8; /* Soft blue background color */
+  text-align: center;
+  border-radius: 10px; /* Rounded corners for the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.home-container h2 {
+  font-size: var(--header-font-size);
+  color: var(--primary-color);
+  margin-bottom: 1em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+}
+
+.home-container p {
+  font-size: var(--font-size);
+  color: var(--text-color);
+  margin-bottom: 2em;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.action-button {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 0.75em 1.5em;
+  font-size: var(--font-size);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.action-button:hover {
+  background-color: var(--button-hover-bg-color);
+  transform: translateY(-2px); /* Lift effect on hover */
 }
