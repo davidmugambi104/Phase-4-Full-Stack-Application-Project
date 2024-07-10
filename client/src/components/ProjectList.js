@@ -44,7 +44,7 @@ const ProjectList = ({ projects, openProjectForm, handleSuccess }) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Projects</h2>
       <table className="project-table">
         <thead>
@@ -60,17 +60,19 @@ const ProjectList = ({ projects, openProjectForm, handleSuccess }) => {
             <tr key={project.id}>
               <td data-label="Title">{project.title}</td>
               <td data-label="Description">{project.description}</td>
-              <td data-label="Rate">${project.rate}</td>
+              <td data-label="Rate">{project.rate}</td>
               <td data-label="Action">
-                <button onClick={() => handleEdit(project)}>Edit</button>
-                <button onClick={() => handleDelete(project.id)}>Delete</button>
-                <button onClick={() => toggleProjectDetails(project.id)}>View</button>
+                <div className="action-buttons">
+                  <button className="view-button" onClick={() => toggleProjectDetails(project.id)}>View</button>
+                  <button className="edit-button" onClick={() => handleEdit(project)}>Edit</button>
+                  <button className="delete-button" onClick={() => handleDelete(project.id)}>Delete</button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={() => openProjectForm(null)}>Add Project</button>
+      <button className="add-project-button" onClick={() => openProjectForm(null)}>Add Project</button>
 
       {expandedProject && (
         <div className="modal">
@@ -79,7 +81,7 @@ const ProjectList = ({ projects, openProjectForm, handleSuccess }) => {
             <h2>Project Details</h2>
             <p><strong>Title:</strong> {expandedProject.title}</p>
             <p><strong>Description:</strong> {expandedProject.description}</p>
-            <p><strong>Rate:</strong> ${expandedProject.rate}</p>
+            <p><strong>Rate:</strong> {expandedProject.rate}</p>
             <h3>Client Details:</h3>
             <p><strong>Name:</strong> {expandedProject.client.name}</p>
             <p><strong>Email:</strong> {expandedProject.client.email}</p>
