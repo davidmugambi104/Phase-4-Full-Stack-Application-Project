@@ -1,84 +1,71 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import './ModalForm.css';
 
-const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [rate, setRate] = useState('');
-  const [freelancer_id, setFreelancerId] = useState('');
-  const [client_id, setClientId] = useState('');
+const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess, initialProject }) => {
+  const [project, setProject] = useState(initialProject ? initialProject : { name: '', description: '' });
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newProject = { title, description, rate, freelancer_id, client_id };
     try {
-      const response = await fetch('http://localhost:5555/projects', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:5555/projects/${initialProject ? initialProject.id : ''}`, {
+        method: initialProject ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newProject),
+        body: JSON.stringify(project),
       });
       if (response.ok) {
         onSuccess();
         onRequestClose();
       } else {
         const errorData = await response.json();
-        setError('Error creating project: ' + errorData.errors.join(', '));
+        setError('Error ' + (initialProject ? 'updating' : 'creating') + ' project: ' + errorData.errors.join(', '));
       }
     } catch (error) {
-      setError('Error creating project: ' + error.message);
+      setError('Error ' + (initialProject ? 'updating' : 'creating') + ' project: ' + error.message);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <h2>Add Project</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel={initialProject ? 'Edit Project' : 'Add Project'}>
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>{initialProject ? 'Edit Project' : 'Add Project'}</h2>
+          <button onClick={onRequestClose}>&times;</button>
         </div>
-        <div>
-          <label>Description</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Rate</label>
-          <input
-            type="number"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Freelancer ID</label>
-          <input
-            type="number"
-            value={freelancer_id}
-            onChange={(e) => setFreelancerId(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Client ID</label>
-          <input
-            type="number"
-            value={client_id}
-            onChange={(e) => setClientId(e.target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            <label>
+              Name:
+              <input
+                type="text"
+                value={project.name}
+                onChange={(e) => setProject({ ...project, name: e.target.value })}
+                required
+              />
+            </label>
+            <label>
+              Description:
+              <textarea
+                value={project.description}
+                onChange={(e) => setProject({ ...project, description: e.target.value })}
+                required
+              />
+            </label>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="cancel-button" onClick={onRequestClose}>
+              Cancel
+            </button>
+            <button type="submit" className="submit-button">
+              {initialProject ? 'Update Project' : 'Add Project'}
+            </button>
+          </div>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
     </Modal>
   );
 };

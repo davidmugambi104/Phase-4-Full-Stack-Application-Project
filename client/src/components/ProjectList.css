@@ -1,23 +1,70 @@
 .project-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 1em;
-    font-family: 'Arial', sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+}
+
+.project-table thead {
+  background-color: #f2f2f2;
+}
+
+.project-table th,
+.project-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  white-space: nowrap; /* Ensure text doesn't wrap */
+}
+
+.project-table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+/* Media query for responsive design */
+@media screen and (max-width: 768px) {
+  .project-table {
+    display: block;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping of table rows */
   }
-  
-  .project-table thead tr {
-    background-color: #f2f2f2;
+
+  .project-table thead,
+  .project-table tbody,
+  .project-table th,
+  .project-table td,
+  .project-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .project-table td {
     text-align: left;
   }
-  
-  .project-table th,
-  .project-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
+
+  .project-table th {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  .project-table tbody tr {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .project-table tbody td {
+    display: block;
+    text-align: left;
+  }
+  .popup-card {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 10px;
   }
   
-  .project-table tbody tr:nth-of-type(even) {
-    background-color: #f9f9f9;
+  .popup-card button {
+    margin-top: 10px;
   }
   
+}

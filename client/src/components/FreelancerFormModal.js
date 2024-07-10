@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import './ModalForm.css';
 
 const FreelancerFormModal = ({ isOpen, onRequestClose, onSuccess }) => {
   const [name, setName] = useState('');
@@ -32,44 +33,62 @@ const FreelancerFormModal = ({ isOpen, onRequestClose, onSuccess }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <h2>Add Freelancer</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Add Freelancer">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Add Freelancer</h2>
+          <button onClick={onRequestClose}>&times;</button>
         </div>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Rate</label>
-          <input
-            type="number"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            <label>
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Username:
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Rate:
+              <input
+                type="number"
+                value={rate}
+                onChange={(e) => setRate(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="cancel-button" onClick={onRequestClose}>
+              Cancel
+            </button>
+            <button type="submit" className="submit-button">
+              Add Freelancer
+            </button>
+          </div>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
     </Modal>
   );
 };

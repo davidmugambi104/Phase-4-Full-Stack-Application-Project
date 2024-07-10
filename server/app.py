@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from models import db, Freelancer, Project, Client
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
@@ -16,7 +15,6 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.json.compact = False
 
 migrate = Migrate(app, db)
 
@@ -69,6 +67,23 @@ class FreelancerByID(Resource):
             )
         return response
 
+    def delete(self, id):
+        freelancer = Freelancer.query.filter_by(id=id).first()
+        if freelancer:
+            db.session.delete(freelancer)
+            db.session.commit()
+            response_dict = {"message": "Freelancer successfully deleted"}
+            response = make_response(
+                jsonify(response_dict),
+                200
+            )
+        else:
+            response = make_response(
+                jsonify({"error": "Freelancer not found"}),
+                404
+            )
+        return response
+
 class Clients(Resource):
     def get(self):
         response_dict_list = [n.to_dict() for n in Client.query.all()]
@@ -93,6 +108,38 @@ class Clients(Resource):
 
         except Exception as e:
             return make_response(jsonify({"errors": [str(e)]}), 400)
+
+class ClientByID(Resource):
+    def get(self, id):
+        response_dict = Client.query.filter_by(id=id).first()
+        if response_dict:
+            response = make_response(
+                jsonify(response_dict.to_dict()),
+                200,
+            )
+        else:
+            response = make_response(
+                jsonify({"error": "client not found"}),
+                404
+            )
+        return response
+
+    def delete(self, id):
+        client = Client.query.filter_by(id=id).first()
+        if client:
+            db.session.delete(client)
+            db.session.commit()
+            response_dict = {"message": "Client successfully deleted"}
+            response = make_response(
+                jsonify(response_dict),
+                200
+            )
+        else:
+            response = make_response(
+                jsonify({"error": "Client not found"}),
+                404
+            )
+        return response
 
 class Projects(Resource):
     def get(self):
@@ -166,14 +213,14 @@ class ProjectByID(Resource):
         if project:
             db.session.delete(project)
             db.session.commit()
-            response_dict = {"message": "record successfully deleted"}
+            response_dict = {"message": "Project successfully deleted"}  # Updated message
             response = make_response(
                 jsonify(response_dict),
                 200
             )
         else:
             response = make_response(
-                jsonify({"error": "project not found"}),
+                jsonify({"error": "Project not found"}),
                 404
             )
         return response
@@ -181,6 +228,7 @@ class ProjectByID(Resource):
 api.add_resource(Freelancers, "/freelancers")
 api.add_resource(FreelancerByID, "/freelancers/<int:id>")
 api.add_resource(Clients, "/clients")
+api.add_resource(ClientByID, "/clients/<int:id>")
 api.add_resource(Projects, "/projects")
 api.add_resource(ProjectByID, "/projects/<int:id>")
 

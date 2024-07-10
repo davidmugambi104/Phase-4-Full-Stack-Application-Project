@@ -1,110 +1,72 @@
-/* Reset some basic elements */
-* {
+/* Define CSS variables for colors, font sizes, etc. */
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #f2f2f2;
+  --text-color: #333;
+  --border-color: #ddd;
+  --font-family: 'Arial', sans-serif;
+  --font-size: 16px;
+  --header-font-size: 24px;
+  --button-bg-color: #4CAF50;
+  --button-text-color: #fff;
+  --button-hover-bg-color: #45a049;
+}
+
+/* Reset some default styles */
+body, h1, h2, p {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: var(--font-family);
 }
 
-/* Make the app take up the whole screen */
-html, body, #root {
-  height: 100%;
-  width: 100%;
-}
-
-/* Basic styling for the body */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  font-size: var(--font-size);
+  color: var(--text-color);
+  background-color: #fff;
 }
 
-/* Header styles */
 header {
-  background-color: #007bff;
-  color: white;
-  padding: 20px;
+  background-color: var(--primary-color);
+  padding: 1em;
+  color: var(--button-text-color);
   text-align: center;
-  width: 100%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-header h1 {
-  margin: 0;
-}
-
-/* Navigation styles */
 nav ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
 }
 
 nav ul li {
   display: inline;
+  margin-right: 1em;
 }
 
 nav ul li a {
-  color: white;
+  color: var(--button-text-color);
   text-decoration: none;
-  font-weight: bold;
 }
 
-/* Main content area */
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  margin: 20px auto;
-  width: 80%;
-  max-width: 1000px;
-}
-
-/* Footer styles */
 footer {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--secondary-color);
+  padding: 1em;
   text-align: center;
-  padding: 10px;
-  width: 100%;
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  margin-top: 0;
-}
-
-/* Form styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input, textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
+  margin-top: 2em;
 }
 
 button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
   border: none;
-  border-radius: 5px;
+  padding: 0.5em 1em;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: var(--button-hover-bg-color);
+}
+
+.error {
+  color: red;
 }

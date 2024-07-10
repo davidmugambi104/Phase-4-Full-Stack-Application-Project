@@ -1,66 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import './ModalForm.css';
 
-const ClientFormModal = ({ isOpen, onRequestClose, onSuccess }) => {
+const ClientFormModal = ({ isOpen, onRequestClose, onSuccess, initialData }) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setUsername(initialData.username);
+      setEmail(initialData.email);
+    }
+  }, [initialData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newClient = { name, username, email };
+    const updatedClient = { name, username, email };
     try {
-      const response = await fetch('http://localhost:5555/clients', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:5555/clients/${initialData.id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newClient),
+        body: JSON.stringify(updatedClient),
       });
       if (response.ok) {
         onSuccess();
         onRequestClose();
       } else {
         const errorData = await response.json();
-        setError('Error creating client: ' + errorData.errors.join(', '));
+        setError('Error updating client: ' + errorData.errors.join(', '));
       }
     } catch (error) {
-      setError('Error creating client: ' + error.message);
+      setError('Error updating client: ' + error.message);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-      <h2>Add Client</h2>
-      {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Edit Client">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Edit Client</h2>
+          <button onClick={onRequestClose}>&times;</button>
         </div>
-        <div>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-body">
+            <label>
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Username:
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="cancel-button" onClick={onRequestClose}>
+              Cancel
+            </button>
+            <button type="submit" className="submit-button">
+              Update Client
+            </button>
+          </div>
+        </form>
+        {error && <p className="error">{error}</p>}
+      </div>
     </Modal>
   );
 };

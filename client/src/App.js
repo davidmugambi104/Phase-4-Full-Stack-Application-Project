@@ -8,8 +8,8 @@ import ClientFormModal from "./components/ClientFormModal";
 import FreelancerFormModal from "./components/FreelancerFormModal";
 import ProjectFormModal from "./components/ProjectFormModal";
 import Modal from 'react-modal';
+import './index.css';  // Import global styles
 
-// Set the app element for react-modal
 Modal.setAppElement('#root');
 
 function App() {
@@ -21,37 +21,36 @@ function App() {
   const [isProjectFormOpen, setIsProjectFormOpen] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5555/freelancers")
-      .then(response => response.json())
-      .then(data => setFreelancers(data))
-      .catch(error => console.error('Error fetching freelancers:', error));
-
-    fetch("http://localhost:5555/clients")
-      .then(response => response.json())
-      .then(data => setClients(data))
-      .catch(error => console.error('Error fetching clients:', error));
-
-    fetch("http://localhost:5555/projects")
-      .then(response => response.json())
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error fetching projects:', error));
+    fetchFreelancers();
+    fetchClients();
+    fetchProjects();
   }, []);
 
-  const handleSuccess = () => {
+  const fetchFreelancers = () => {
     fetch("http://localhost:5555/freelancers")
       .then(response => response.json())
       .then(data => setFreelancers(data))
       .catch(error => console.error('Error fetching freelancers:', error));
+  };
 
+  const fetchClients = () => {
     fetch("http://localhost:5555/clients")
       .then(response => response.json())
       .then(data => setClients(data))
       .catch(error => console.error('Error fetching clients:', error));
+  };
 
+  const fetchProjects = () => {
     fetch("http://localhost:5555/projects")
       .then(response => response.json())
       .then(data => setProjects(data))
       .catch(error => console.error('Error fetching projects:', error));
+  };
+
+  const handleSuccess = () => {
+    fetchFreelancers();
+    fetchClients();
+    fetchProjects();
   };
 
   return (
@@ -78,13 +77,13 @@ function App() {
               />
             </Route>
             <Route path="/freelancers">
-              <FreelancerList freelancers={freelancers} openFreelancerForm={() => setIsFreelancerFormOpen(true)} />
+              <FreelancerList freelancers={freelancers} openFreelancerForm={() => setIsFreelancerFormOpen(true)} handleSuccess={handleSuccess} />
             </Route>
             <Route path="/clients">
-              <ClientList clients={clients} openClientForm={() => setIsClientFormOpen(true)} />
+              <ClientList clients={clients} openClientForm={() => setIsClientFormOpen(true)} handleSuccess={handleSuccess} />
             </Route>
             <Route path="/projects">
-              <ProjectList projects={projects} openProjectForm={() => setIsProjectFormOpen(true)} />
+              <ProjectList projects={projects} openProjectForm={() => setIsProjectFormOpen(true)} handleSuccess={handleSuccess} />
             </Route>
           </Switch>
         </main>

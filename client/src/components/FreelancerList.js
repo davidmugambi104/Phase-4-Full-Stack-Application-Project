@@ -1,7 +1,31 @@
 import React from 'react';
-import './FreelancerList.css';  // Import a CSS file for styling
+import './FreelancerList.css';
 
-const FreelancerList = ({ freelancers, openFreelancerForm }) => {
+const FreelancerList = ({ freelancers, openFreelancerForm, handleSuccess }) => {
+  const handleEdit = (freelancer) => {
+    openFreelancerForm(freelancer);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this freelancer?')) {
+      fetch(`http://localhost:5555/freelancers/${id}`, {
+        method: 'DELETE',
+      })
+      .then(response => {
+        if (response.ok) {
+          // Refresh freelancer list after deletion
+          handleSuccess();  // Call the handleSuccess method to refresh the list
+        } else {
+          throw new Error('Failed to delete freelancer');
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting freelancer:', error);
+        // Handle error state
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Freelancers</h2>
@@ -12,6 +36,7 @@ const FreelancerList = ({ freelancers, openFreelancerForm }) => {
             <th>Username</th>
             <th>Email</th>
             <th>Rate</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -21,11 +46,15 @@ const FreelancerList = ({ freelancers, openFreelancerForm }) => {
               <td>{freelancer.username}</td>
               <td>{freelancer.email}</td>
               <td>{freelancer.rate}</td>
+              <td>
+                <button onClick={() => handleEdit(freelancer)}>Edit</button>
+                <button onClick={() => handleDelete(freelancer.id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={openFreelancerForm}>Add Freelancer</button>
+      <button onClick={() => openFreelancerForm(null)}>Add Freelancer</button>
     </div>
   );
 };

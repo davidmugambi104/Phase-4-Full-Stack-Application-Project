@@ -1,23 +1,20 @@
 .client-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 1em;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .client-table thead tr {
-    background-color: #f2f2f2;
-    text-align: left;
-  }
-  
-  .client-table th,
-  .client-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-  }
-  
-  .client-table tbody tr:nth-of-type(even) {
-    background-color: #f9f9f9;
-  }
-  
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+}
+
+.client-table thead tr {
+  background-color: var(--secondary-color);
+  text-align: left;
+}
+
+.client-table th, .client-table td {
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+}
+
+.client-table tbody tr:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
