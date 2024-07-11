@@ -9,12 +9,13 @@ const FreelancerFormModal = ({ isOpen, onRequestClose, onSuccess, initialData })
   const [rate, setRate] = useState('');
   const [error, setError] = useState(null);
 
+  // useEffect to populate form fields when initialData changes
   useEffect(() => {
     if (initialData) {
-      setName(initialData.name);
-      setUsername(initialData.username);
-      setEmail(initialData.email);
-      setRate(initialData.rate);
+      setName(initialData.name || '');
+      setUsername(initialData.username || '');
+      setEmail(initialData.email || '');
+      setRate(initialData.rate || '');
     } else {
       setName('');
       setUsername('');
@@ -25,15 +26,30 @@ const FreelancerFormModal = ({ isOpen, onRequestClose, onSuccess, initialData })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newFreelancer = { name, username, email, rate };
+    const updatedFreelancer = { name, username, email, rate };
+
     try {
-      const response = await fetch(`http://localhost:5555/freelancers${initialData ? `/${initialData.id}` : ''}`, {
-        method: initialData ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newFreelancer),
-      });
+      let response;
+      if (initialData) {
+        // Update existing freelancer using PATCH
+        response = await fetch(`http://localhost:5555/freelancers/${initialData.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedFreelancer),
+        });
+      } else {
+        // Add new freelancer using POST
+        response = await fetch('http://localhost:5555/freelancers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedFreelancer),
+        });
+      }
+
       if (response.ok) {
         onSuccess();
         onRequestClose();

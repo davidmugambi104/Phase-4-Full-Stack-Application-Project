@@ -28,7 +28,7 @@ const ClientFormModal = ({ isOpen, onRequestClose, onSuccess, initialData }) => 
       if (initialData) {
         // Editing existing client
         response = await fetch(`http://localhost:5555/clients/${initialData.id}`, {
-          method: 'PUT',
+          method: 'PATCH', // Use PATCH for partial updates
           headers: {
             'Content-Type': 'application/json',
           },

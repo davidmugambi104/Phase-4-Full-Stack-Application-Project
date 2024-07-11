@@ -24,9 +24,9 @@ const ProjectFormModal = ({ isOpen, onRequestClose, onSuccess, initialProject })
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = 'POST';
+    const method = initialProject ? 'PATCH' : 'POST';
     const url = `http://localhost:5555/projects${initialProject ? `/${initialProject.id}` : ''}`;
-    const body = initialProject ? { ...project, _method: 'PUT' } : project;
+    const body = initialProject ? { ...project, _method: 'PATCH' } : project;
 
     try {
       const response = await fetch(url, {
