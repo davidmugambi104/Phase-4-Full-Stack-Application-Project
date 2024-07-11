@@ -360,4 +360,4 @@ api.add_resource(Projects, '/projects')
 api.add_resource(ProjectByID, '/projects/<int:id>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='localhost', port=5555, debug=True)
