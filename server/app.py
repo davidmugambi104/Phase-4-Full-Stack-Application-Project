@@ -284,15 +284,33 @@ class ProjectByID(Resource):
             )
         return response
 
+    def delete(self, id):
+        project = Project.query.filter_by(id=id).first()
+        if project:
+            db.session.delete(project)
+            db.session.commit()
+            response_dict = {"message": "Project successfully deleted"}
+            response = make_response(
+                jsonify(response_dict),
+                200
+            )
+        else:
+            response = make_response(
+                jsonify({"error": "Project not found"}),
+                404
+            )
+        return response
+
     def put(self, id):
         project = Project.query.filter_by(id=id).first()
         if project:
             try:
-                project.title = request.json.get("title", project.title)
-                project.description = request.json.get("description", project.description)
-                project.rate = request.json.get("rate", project.rate)
-                project.freelancer_id = request.json.get("freelancer_id", project.freelancer_id)
-                project.client_id = request.json.get("client_id", project.client_id)
+                data = request.json
+                project.title = data.get("title", project.title)
+                project.description = data.get("description", project.description)
+                project.rate = data.get("rate", project.rate)
+                project.freelancer_id = data.get("freelancer_id", project.freelancer_id)
+                project.client_id = data.get("client_id", project.client_id)
 
                 db.session.commit()
                 response = make_response(
@@ -315,7 +333,8 @@ class ProjectByID(Resource):
         project = Project.query.filter_by(id=id).first()
         if project:
             try:
-                for key, value in request.json.items():
+                data = request.json
+                for key, value in data.items():
                     if hasattr(project, key):
                         setattr(project, key, value)
                 db.session.commit()
@@ -335,29 +354,12 @@ class ProjectByID(Resource):
             )
         return response
 
-    def delete(self, id):
-        project = Project.query.filter_by(id=id).first()
-        if project:
-            db.session.delete(project)
-            db.session.commit()
-            response_dict = {"message": "Project successfully deleted"}
-            response = make_response(
-                jsonify(response_dict),
-                200
-            )
-        else:
-            response = make_response(
-                jsonify({"error": "Project not found"}),
-                404
-            )
-        return response
+api.add_resource(Freelancers, "/freelancers")
+api.add_resource(FreelancerByID, "/freelancers/<int:id>")
+api.add_resource(Clients, "/clients")
+api.add_resource(ClientByID, "/clients/<int:id>")
+api.add_resource(Projects, "/projects")
+api.add_resource(ProjectByID, "/projects/<int:id>")
 
-api.add_resource(Freelancers, '/freelancers')
-api.add_resource(FreelancerByID, '/freelancers/<int:id>')
-api.add_resource(Clients, '/clients')
-api.add_resource(ClientByID, '/clients/<int:id>')
-api.add_resource(Projects, '/projects')
-api.add_resource(ProjectByID, '/projects/<int:id>')
-
-if __name__ == '__main__':
-    app.run(host='localhost', port=5555, debug=True)
+if __name__ == "__main__":
+    app.run(port=5555, debug=True)
